@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../product.service';
 import { Product } from '../product';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-products',
@@ -9,15 +10,19 @@ import { Product } from '../product';
 })
 export class ProductsComponent implements OnInit {
 
+  dataSource: MatTableDataSource<Product>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  products: Product;
+  headers;
+  error;
+
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
     this.getProducts();
   }
-
-  products: Product;
-  headers;
-  error;
 
   getProducts() {
     return this.productService.getProducts().subscribe(response => {

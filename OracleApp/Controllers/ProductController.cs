@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using OracleApp.Application.Product;
 using OracleApp.Infrastructure.Persistence.Dal.Product;
 
 namespace OracleApp.Controllers
@@ -8,12 +9,19 @@ namespace OracleApp.Controllers
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
+        private readonly IProductQueryService _productQueryService;
+
+        public ProductController(ProductQueryService productQueryService)
+        {
+            _productQueryService = productQueryService;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public IEnumerable<ProductDal> Get()
         {
-            string sql = "select name from products";
-            var list = OracleContext.QueryForList<Product>(sql).ToList();
+            string sql = "select product_id, name, description, price from products";
+            var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
 
             return list;
         }

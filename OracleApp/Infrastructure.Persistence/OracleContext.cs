@@ -81,6 +81,7 @@ namespace OracleApp
         {
             IList<T> list = new List<T>();
 
+            var x = reader.Read();
             while (reader.Read())
             {
                 T t = Activator.CreateInstance<T>();

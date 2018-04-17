@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using OracleApp.Infrastructure.Persistence.Dal.Product;
 
 namespace OracleApp.Controllers
 {
@@ -14,9 +10,6 @@ namespace OracleApp.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            string sql = "select name from products";
-            var list = OracleContext.QueryForList<Product>(sql).ToList();
-
             return new string[] { "value1", "value2" };
         }
 
