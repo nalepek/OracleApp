@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using OracleApp.Application.Product;
 using OracleApp.Infrastructure.Persistence.Dal.Product;
+using OracleApp.Infrastructure.Persistence.Searchers.Product;
 
 namespace OracleApp.Controllers
 {
@@ -11,26 +12,23 @@ namespace OracleApp.Controllers
     {
         private readonly IProductQueryService _productQueryService;
 
-        public ProductController(ProductQueryService productQueryService)
+        public ProductController(IProductQueryService productQueryService)
         {
             _productQueryService = productQueryService;
         }
 
         // GET api/values
-        [HttpGet]
-        public IEnumerable<ProductDal> Get()
+        [HttpPost("Search")]
+        public IEnumerable<ProductDal> SearchProducts([FromBody] ProductSearchCriteria criteria)
         {
-            string sql = "select product_id, name, description, price from products";
-            var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
-
-            return list;
+            return _productQueryService.Search(criteria);
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("Get")]
+        public ProductDal GetProduct([FromBody] ProductSearchCriteria criteria)
         {
-            return "value";
+            return _productQueryService.Get(criteria);
         }
 
         // POST api/values

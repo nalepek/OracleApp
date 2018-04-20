@@ -14,14 +14,15 @@ export class ProductsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  products: Product;
+  products: Array<Product>;
+  product: Product;
   headers;
   error;
 
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
-    this.getProducts();
+    this.getProduct();
   }
 
   getProducts() {
@@ -29,6 +30,17 @@ export class ProductsComponent implements OnInit {
       const keys = response.headers.keys();
       this.headers = keys.map(key => { '${key}: ${response.headers.get(key)}' });
       this.products = response.body;
+    },
+      error => {
+        this.error = error
+      });
+  }
+
+  getProduct() {
+    return this.productService.getProduct().subscribe(response => {
+      const keys = response.headers.keys();
+      this.headers = keys.map(key => { '${key}: ${response.headers.get(key)}' });
+      this.product = response.body;
     },
       error => {
         this.error = error

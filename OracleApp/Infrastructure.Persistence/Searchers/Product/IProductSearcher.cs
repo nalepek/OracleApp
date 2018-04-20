@@ -5,6 +5,8 @@ namespace OracleApp.Infrastructure.Persistence.Searchers.Product
 {
     public interface IProductSearcher
     {
-        List<ProductDal> Search();
+        List<ProductDal> Search(ProductSearchCriteria criteria);
+
+        ProductDal Get(ProductSearchCriteria criteria);
     }
 }

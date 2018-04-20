@@ -68,7 +68,9 @@ namespace OracleApp
             {
                 OracleCommand cmd = conn.CreateCommand();
                 cmd.CommandText = sql;
+                
                 OracleDataReader dtr = cmd.ExecuteReader();
+               
                 return dtr;
             }
             catch (Exception ex)
@@ -81,7 +83,6 @@ namespace OracleApp
         {
             IList<T> list = new List<T>();
 
-            var x = reader.Read();
             while (reader.Read())
             {
                 T t = Activator.CreateInstance<T>();
@@ -127,7 +128,8 @@ namespace OracleApp
                     {
                         tempValue = reader.GetValue(i);
                     }
-                    obj.GetProperty(reader.GetName(i)).SetValue(t, tempValue, null);
+                    
+                    obj.GetProperty(reader.GetName(i).ToLower()).SetValue(t, tempValue, null);
                 }
                 return t;
             }

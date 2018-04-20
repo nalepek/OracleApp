@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OracleApp.Application.Product;
+using OracleApp.Infrastructure.Persistence.QueryBuilders.Product;
+using OracleApp.Infrastructure.Persistence.Searchers.Product;
+using OracleApp.Middleware;
 
 namespace OracleApp
 {
@@ -26,6 +29,7 @@ namespace OracleApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IProductQueryService, ProductQueryService>();
+            services.AddTransient<IProductSearcher, ProductQueryBuilder>();
 
             services.AddCors(options =>
             {
@@ -49,6 +53,8 @@ namespace OracleApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandlingMiddleware();
 
             app.Use(async (context, next) =>
             {

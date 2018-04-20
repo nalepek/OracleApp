@@ -7,35 +7,44 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
 {
     public class ProductQueryBuilder : IProductSearcher
     {
-
-        public string Select()
+        private string Select()
         {
-            string sql = "select product_id, name, description, price from products";
+            return @" SELECT product_id,
+                             name,
+                             description,
+                             price ";
+        }
+
+        private string From()
+        {
+            return " FROM Products ";
+        }
+
+        private string Where(ProductSearchCriteria criteria)
+        {
+            return string.Concat(" WHERE 1=1 ",
+                criteria.ProductId.HasValue ? " AND product_id = " + criteria.ProductId.Value : null );
+        }
+
+        private string OrderBy()
+        {
+            return "";
+        }
+
+        public List<ProductDal> Search(ProductSearchCriteria criteria)
+        {
+            string sql = string.Concat(Select(), From(), Where(criteria), OrderBy());
             var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
 
-            //return list;
-
-            return "";
+            return list;
         }
 
-        public string From()
+        public ProductDal Get(ProductSearchCriteria criteria)
         {
-            return "";
-        }
+            string sql = string.Concat(Select(), From(), Where(criteria), OrderBy());
+            var result = OracleContext.QueryForObj<ProductDal>(sql);
 
-        public string Where()
-        {
-            return "";
-        }
-
-        public string OrderBy()
-        {
-            return "";
-        }
-
-        public List<ProductDal> Search()
-        {
-            throw new System.NotImplementedException();
+            return (ProductDal)result;
         }
     }
 }
