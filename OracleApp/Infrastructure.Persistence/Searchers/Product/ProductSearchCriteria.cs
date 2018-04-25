@@ -1,6 +1,8 @@
-﻿namespace OracleApp.Infrastructure.Persistence.Searchers.Product
+﻿using OracleApp.Common.Searchers;
+
+namespace OracleApp.Infrastructure.Persistence.Searchers.Product
 {
-    public class ProductSearchCriteria
+    public class ProductSearchCriteria : Criteria
     {
         public int? ProductId { get; set; }
     }

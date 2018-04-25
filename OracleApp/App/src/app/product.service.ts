@@ -16,9 +16,17 @@ export class ProductService {
 
   criteria = new ProductSearchCriteria();
 
-  getProducts(): Observable<HttpResponse<Array<Product>>> {
-    let url = this.productsUrl + "/search";    
-    return this.http.post<Array<Product>>(url, {}, { observe: 'response'});
+  getProducts(sort: string, order: string, page: number): Observable<HttpResponse<Array<Product>>> {
+    const url = this.productsUrl + "/search";
+    const requestUrl = `${url}?sort=${sort}&order=${order}&page=${page}`;
+
+    //const href = 'https://api.github.com/search/issues';
+    //const requestUrl =
+      //`${href}?q=repo:angular/material2&sort=${sort}&order=${order}&page=${page + 1}`;
+
+    //return this.http.get<GithubApi>(requestUrl);
+
+    return this.http.get<Array<Product>>(requestUrl, { observe: 'response'});
   }
 
   getProduct(): Observable<HttpResponse<Product>> {

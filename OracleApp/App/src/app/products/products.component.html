@@ -1,8 +1,14 @@
-<!--<mat-table [dataSource]="">
+<!--<mat-table [dataSource]=”dataSource”>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let product"> {{product.name}} </mat-cell>
+  </ng-container>
 
 </mat-table>-->
 
-<!--<div class="example-container mat-elevation-z8">
+<!--
+<div class="example-container mat-elevation-z8">
   <div class="example-loading-shade"
        *ngIf="isLoadingResults || isRateLimitReached">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
@@ -14,27 +20,27 @@
   <mat-table #table [dataSource]="dataSource" class="example-table"
              matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
 
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" 
-    <!-- Number Column 
+    <!-- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition"
+    <!-- Number Column
     <ng-container matColumnDef="number">
       <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.number }}</mat-cell>
     </ng-container>
 
-    <!-- Title Column 
+    <!-- Title Column
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.title }}</mat-cell>
     </ng-container>
 
-    <!-- State Column 
+    <!-- State Column
     <ng-container matColumnDef="state">
       <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.state }}</mat-cell>
     </ng-container>
 
-    <!-- Created Column 
+    <!-- Created Column
     <ng-container matColumnDef="created">
       <mat-header-cell *matHeaderCellDef
                        mat-sort-header
@@ -48,11 +54,11 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="resultsLength" [pageSize]="30">
-  </mat-paginator>
-</div>
+    <mat-paginator [length]="resultsLength" [pageSize]="30">
+    </mat-paginator>
+  </div>
 
 
-<!-- Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->-->
+  <!-- Copyright 2018 Google Inc. All Rights Reserved.
+      Use of this source code is governed by an MIT-style license that
+      can be found in the LICENSE file at http://angular.io/license -->
