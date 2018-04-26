@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OracleApp.Common.QueryBuilders;
+using OracleApp.Infrastructure.Persistence.Dal;
 using OracleApp.Infrastructure.Persistence.Dal.Product;
 using OracleApp.Infrastructure.Persistence.Searchers.Product;
 
@@ -33,47 +34,57 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
                 criteria.ProductId.HasValue ? " AND product_id = " + criteria.ProductId.Value : null );
         }
 
-        private string OrderBy(ProductSearchCriteria criteria)
+        public override string OrderBy(ProductSearchCriteria criteria)
         {
             return string.Concat(" ORDER BY ",
                                     !string.IsNullOrWhiteSpace(criteria.Sort) ? String.Format(" {0} " , criteria.Sort) : " product_id ",
                                     !string.IsNullOrWhiteSpace(criteria.Order) ? String.Format(" {0} " , criteria.Order) : " asc ");                                    
         }
 
-        public List<ProductDal> Search(ProductSearchCriteria criteria)
+        public ProductSearchResult Search(ProductSearchCriteria criteria)
         {
             var select = Select(criteria);
             var from = From(criteria);
             var where = Where(criteria);
             var orderBy = OrderBy(criteria);
 
-            string sql = BuildSql(select, from, where, orderBy, criteria);
+            var count = GetCount(select, from, where, orderBy, criteria);
 
-            var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
+            if (count != null && count.count != 0)
+            {
+                string sql = BuildResult(select, from, where, orderBy, criteria);
 
-            return list;
+                var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
+
+                return new ProductSearchResult
+                {
+                    Items = list,
+                    Count = count.count
+                };
+            }
+            return new ProductSearchResult
+            {
+                Items = new List<ProductDal>(),
+                Count = 0
+            };
         }
 
         public ProductDal Get(ProductSearchCriteria criteria)
         {
-            string sql = BuildSql(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria), criteria);
+            string sql = BuildResult(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria), criteria);
 
             var result = OracleContext.QueryForObj<ProductDal>(sql);
 
             return (ProductDal)result;
         }
 
+        public override CountDal GetCount(string select, string from, string where, string orderBy, ProductSearchCriteria criteria)
+        {
+            string sql = BuildCount(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria));
+
+            var result = OracleContext.QueryForObj<CountDal>(sql);
+
+            return (CountDal)result;
+        }
     }
 }
-
-//SELECT* FROM(
-//  SELECT
-//    product_id,
-//    name,
-//    description,
-//    price,
-//    row_number() over (order by product_id asc) rn
-//  FROM products
-//  ) where 1 = 1
-//  and rn between 7 and 12
-//  order by product_id asc

@@ -2,6 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../product.service';
 import { Product } from '../product';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { merge } from 'rxjs/observable/merge';
+import { map } from 'rxjs/operators/map';
+import { startWith } from 'rxjs/operators/startWith';
+import { switchMap } from 'rxjs/operators/switchMap';
+import { catchError } from 'rxjs/operators/catchError';
+import { of as observableOf } from 'rxjs/observable/of';
+
 
 @Component({
   selector: 'app-products',
@@ -10,7 +17,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 })
 export class ProductsComponent implements OnInit {
 
-  displayedColumns = ['created', 'state', 'number', 'title'];
+  displayedColumns = ['product_id', 'name', 'description', 'price'];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -29,9 +36,32 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.getProducts('name', 'asc', 0);
-    //this.getProducts(this.sort.active, this.sort.direction, this.paginator.pageIndex);
 
-    //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    //merge(this.sort.sortChange, this.paginator.page)
+    //  .pipe(
+    //  startWith({}),
+    //  switchMap(() => {
+    //    this.isLoadingResults = true;
+    //    return this.getProducts(
+    //      this.sort.active, this.sort.direction, this.paginator.pageIndex);
+    //  }),
+    //  map(data => {
+    //    // Flip flag to show that loading has finished.
+    //    this.isLoadingResults = false;
+    //    this.isRateLimitReached = false;
+    //    this.resultsLength = data.total_count;
+
+    //    return data.items;
+    //  }),
+    //  catchError(() => {
+    //    this.isLoadingResults = false;
+    //    // Catch if the GitHub API has reached its rate limit. Return empty data.
+    //    this.isRateLimitReached = true;
+    //    return observableOf([]);
+    //  })
+    //  ).subscribe(data => this.dataSource.data = data);
   }
 
   getProducts(sort: string, order: string, page: number) {

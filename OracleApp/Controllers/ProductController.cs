@@ -19,7 +19,7 @@ namespace OracleApp.Controllers
 
         // GET api/values
         [HttpGet("search")]
-        public IEnumerable<ProductDal> SearchProducts([FromQuery] ProductSearchCriteria criteria)
+        public ProductSearchResult SearchProducts([FromQuery] ProductSearchCriteria criteria)
         {
             return _productQueryService.Search(criteria);
         }
