@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Product } from './product';
+import { Product, ProductSearchResult } from './product';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { catchError, retry } from 'rxjs/operators';
@@ -16,17 +16,11 @@ export class ProductService {
 
   criteria = new ProductSearchCriteria();
 
-  getProducts(sort: string, order: string, page: number): Observable<HttpResponse<Array<Product>>> {
+  getProducts(sort: string, order: string, page: number): Observable<ProductSearchResult> {
     const url = this.productsUrl + "/search";
     const requestUrl = `${url}?sort=${sort}&order=${order}&page=${page}`;
 
-    //const href = 'https://api.github.com/search/issues';
-    //const requestUrl =
-      //`${href}?q=repo:angular/material2&sort=${sort}&order=${order}&page=${page + 1}`;
-
-    //return this.http.get<GithubApi>(requestUrl);
-
-    return this.http.get<Array<Product>>(requestUrl, { observe: 'response'});
+    return this.http.get<ProductSearchResult>(requestUrl);
   }
 
   getProduct(): Observable<HttpResponse<Product>> {

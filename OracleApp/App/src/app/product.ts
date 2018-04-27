@@ -1,4 +1,4 @@
-export class ProductApi {
+export class ProductSearchResult {
   items: Product[];
   total_count: number;
 }

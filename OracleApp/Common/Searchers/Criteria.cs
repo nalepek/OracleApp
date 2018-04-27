@@ -8,6 +8,7 @@ namespace OracleApp.Common.Searchers
         {
             PageSize = 10;
             Page = 0;
+            Order = "asc";
         }
 
         [FromQuery(Name = "order")]

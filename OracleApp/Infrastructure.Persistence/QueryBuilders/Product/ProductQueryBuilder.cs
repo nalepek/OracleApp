@@ -37,8 +37,8 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
         public override string OrderBy(ProductSearchCriteria criteria)
         {
             return string.Concat(" ORDER BY ",
-                                    !string.IsNullOrWhiteSpace(criteria.Sort) ? String.Format(" {0} " , criteria.Sort) : " product_id ",
-                                    !string.IsNullOrWhiteSpace(criteria.Order) ? String.Format(" {0} " , criteria.Order) : " asc ");                                    
+                                    string.IsNullOrWhiteSpace(criteria.Sort) || criteria.Sort == "undefined" ? " product_id " : String.Format(" {0} ", criteria.Sort),
+                                    string.IsNullOrWhiteSpace(criteria.Order) ? " asc " : String.Format(" {0} " , criteria.Order));                                    
         }
 
         public ProductSearchResult Search(ProductSearchCriteria criteria)
