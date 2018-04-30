@@ -1,39 +1,3 @@
-<mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
-
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> Name </mat-header-cell>
-    <mat-cell *matCellDef="let product"> {{product.name}} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="description">
-    <mat-header-cell *matHeaderCellDef>
-      Description
-    </mat-header-cell>
-    <mat-cell *matCellDef="let product">{{ product.description }}</mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="product_id">
-    <mat-header-cell *matHeaderCellDef>
-      Product Id
-    </mat-header-cell>
-    <mat-cell *matCellDef="let product">{{ product.product_id }}</mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="price">
-    <mat-header-cell *matHeaderCellDef>
-      Price
-    </mat-header-cell>
-    <mat-cell *matCellDef="let product">{{ product.price }}</mat-cell>
-  </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let products; columns: displayedColumns;"></mat-row>
-
-  <mat-paginator [length]="resultsLength" [pageSize]="10">
-  </mat-paginator>
-</mat-table>
-
-<!--
 <div class="example-container mat-elevation-z8">
   <div class="example-loading-shade"
        *ngIf="isLoadingResults || isRateLimitReached">
@@ -43,48 +7,38 @@
     </div>
   </div>
 
-  <mat-table #table [dataSource]="dataSource" class="example-table"
-             matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+  <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
 
-    <!-- Note that these columns can be defined in any order.
-  The actual rendered columns are set as a property on the row definition"
-    <!-- Number Column
-    <ng-container matColumnDef="number">
-      <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.number }}</mat-cell>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> Name </mat-header-cell>
+      <mat-cell *matCellDef="let product"> {{product.name}} </mat-cell>
     </ng-container>
 
-    <!-- Title Column
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.title }}</mat-cell>
-    </ng-container>
-
-    <!-- State Column
-    <ng-container matColumnDef="state">
-      <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.state }}</mat-cell>
-    </ng-container>
-
-    <!-- Created Column
-    <ng-container matColumnDef="created">
-      <mat-header-cell *matHeaderCellDef
-                       mat-sort-header
-                       disableClear="true">
-        Created
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>
+        Description
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.created_at | date }}</mat-cell>
+      <mat-cell *matCellDef="let product">{{ product.description }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="product_id">
+      <mat-header-cell *matHeaderCellDef>
+        Product Id
+      </mat-header-cell>
+      <mat-cell *matCellDef="let product">{{ product.product_id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef>
+        Price
+      </mat-header-cell>
+      <mat-cell *matCellDef="let product">{{ product.price }}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+    <mat-row *matRowDef="let products; columns: displayedColumns;"></mat-row>
 
-    <mat-paginator [length]="resultsLength" [pageSize]="30">
+    <mat-paginator [length]="resultsLength" [pageSize]="10">
     </mat-paginator>
-  </div>
-
-
-  <!-- Copyright 2018 Google Inc. All Rights Reserved.
-      Use of this source code is governed by an MIT-style license that
-      can be found in the LICENSE file at http://angular.io/license -->
+  </mat-table>
+</div>

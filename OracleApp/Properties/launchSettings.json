@@ -19,7 +19,7 @@
     "OracleApp": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/value",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

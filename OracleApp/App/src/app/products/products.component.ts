@@ -23,7 +23,7 @@ export class ProductsComponent implements OnInit {
   isLoadingResults = true;
   isRateLimitReached = false;
 
-  dataSource: MatTableDataSource<Product>;
+  dataSource = new MatTableDataSource();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -39,12 +39,11 @@ export class ProductsComponent implements OnInit {
 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
+    merge(this.sort.sortChange, this.paginator.page).pipe(
       startWith({}),
       switchMap(() => {
         this.isLoadingResults = true;
-        return this.productService.getProducts(
+        return this.productService!.getProducts(
           this.sort.active, this.sort.direction, this.paginator.pageIndex);
       }),
       map(data => {
@@ -82,7 +81,7 @@ export class ProductsComponent implements OnInit {
       this.product = response.body;
     },
       error => {
-        this.error = error
+        this.error = error;
       });
   }
 }
