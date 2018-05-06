@@ -28,19 +28,19 @@ namespace OracleApp.Controllers
         }
 
         // GET api/values/5
-        [HttpPost("Get")]
+        [HttpPost("get")]
         public ProductDal GetProduct([FromBody] ProductSearchCriteria criteria)
         {
             return _productQueryService.Get(criteria);
         }
 
-        [HttpPost("Update")]
-        public Task<ProductDal> UpdateProduct([FromBody] int productId)
+        [HttpPost("update")]
+        public Task<ProductDal> UpdateProduct([FromBody] ProductDal product)
         {
-            return _productCommandService.Update(productId);
+            return _productCommandService.Update(product);
         }
 
-        [HttpPost("Delete")]
+        [HttpPost("delete")]
         public void DeleteProduct([FromBody] int productId)
         {
             _productCommandService.Delete(productId);

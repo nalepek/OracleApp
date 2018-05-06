@@ -30,9 +30,10 @@ export class ProductService {
     return this.http.post<Product>(url, this.criteria, { observe: 'response' });
   }
 
-  updateProduct(id) {
+  updateProduct(product) : Observable<HttpResponse<Product>> {
     const url = this.productsUrl + '/update';
 
-    return this.http.post<Product>(url, id, { observe: 'response' });
+    let a = this.http.post<Product>(url, { product: product }, { observe: 'response' });
+    return a;
   }
 }

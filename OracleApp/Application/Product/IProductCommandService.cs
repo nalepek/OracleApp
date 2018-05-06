@@ -7,7 +7,7 @@ namespace OracleApp.Application.Product
 {
     public interface IProductCommandService
     {
-        Task<ProductDal> Update(int productId);
+        Task<ProductDal> Update(ProductDal productId);
         void Delete(int productId);
     }
 
@@ -20,9 +20,9 @@ namespace OracleApp.Application.Product
             _mediator = mediator;
         }
 
-        public async Task<ProductDal> Update(int productId)
+        public async Task<ProductDal> Update(ProductDal product)
         {
-            return await _mediator.Send(new ProductCommand(productId));
+            return await _mediator.Send(new ProductCommand(product));
 
         }
 

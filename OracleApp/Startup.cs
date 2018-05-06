@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,9 @@ namespace OracleApp
         {
             services.AddTransient<IProductQueryService, ProductQueryService>();
             services.AddTransient<IProductSearcher, ProductQueryBuilder>();
+            services.AddTransient<IProductCommandService, ProductCommandService>();
+
+            services.AddMediatR(typeof(Startup));
 
             services.AddCors(options =>
             {

@@ -104,7 +104,10 @@ export class ProductsComponent implements OnInit {
   save(event, product) {
 
     product.editMode = false;
-
+    let a = this.productService.updateProduct(product).subscribe(data => {
+      let x = data;
+    });
+    let b = 1;
   }
 
   cancel(event, product) {

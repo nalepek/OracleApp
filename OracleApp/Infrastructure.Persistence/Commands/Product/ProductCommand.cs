@@ -5,11 +5,11 @@ namespace OracleApp.Infrastructure.Persistence.Commands.Product
 {
     public class ProductCommand : IRequest<ProductDal>
     {
-        public int ProductId { get; private set; }
+        public ProductDal Product { get; private set; }
 
-        public ProductCommand(int productId)
+        public ProductCommand(ProductDal product)
         {
-            ProductId = productId;
+            Product = product;
         }
     }
 }
