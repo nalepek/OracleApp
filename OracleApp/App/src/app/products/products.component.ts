@@ -17,7 +17,7 @@ import { of as observableOf } from 'rxjs/observable/of';
 })
 export class ProductsComponent implements OnInit {
 
-  displayedColumns = ['product_id', 'name', 'description', 'price'];
+  displayedColumns = ['name', 'description', 'price', 'actions'];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -35,8 +35,6 @@ export class ProductsComponent implements OnInit {
   constructor(private productService: ProductService) { }
 
   ngOnInit() {
-    //this.getProducts('name', 'asc', 0);
-
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page).pipe(
@@ -50,18 +48,25 @@ export class ProductsComponent implements OnInit {
         // Flip flag to show that loading has finished.
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
-        this.resultsLength = data.total_count;
+        this.resultsLength = data.count;
 
         return data.items;
       }),
-      catchError(() => {
+      catchError(error => {
+        let a = error;
         this.isLoadingResults = false;
         // Catch if the GitHub API has reached its rate limit. Return empty data.
         this.isRateLimitReached = true;
         return observableOf([]);
       })
-      ).subscribe(data => this.dataSource.data = data);
+    ).subscribe(data => {
+      this.dataSource.data = data;
+    });
   }
+
+  //ngAfterViewInit() {
+  //  this.dataSource.paginator = this.paginator;
+  //}
 
   //getProducts(sort: string, order: string, page: number) {
   //  return this.productService.getProducts(sort, order, page).subscribe(response => {
@@ -83,5 +88,27 @@ export class ProductsComponent implements OnInit {
       error => {
         this.error = error;
       });
+  }
+
+  edit(event, product) {
+    //edit -> ok
+    //delete -> cancel
+    //editable fields
+    product.editMode = true;
+  }
+
+  delete(event, product) {
+    //are you sure
+  }
+
+  save(event, product) {
+
+    product.editMode = false;
+
+  }
+
+  cancel(event, product) {
+
+    product.editMode = false;
   }
 }

@@ -1,3 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css');
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.basic-container {
+  padding: 5px;
+}
+
+.version-info {
+  font-size: 8pt;
+  float: right;
+}
+
+.cell-container {
+}
+
+  .cell-container .form-control {
+    width: 90% !important;
+  }
+
+  .cell-container .form-group {
+    margin: initial !important;
+  }

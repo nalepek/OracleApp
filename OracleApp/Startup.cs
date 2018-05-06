@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OracleApp.Application.Product;
+using OracleApp.Infrastructure.Persistence;
 using OracleApp.Infrastructure.Persistence.QueryBuilders.Product;
 using OracleApp.Infrastructure.Persistence.Searchers.Product;
 using OracleApp.Middleware;

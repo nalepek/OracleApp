@@ -3,42 +3,71 @@
        *ngIf="isLoadingResults || isRateLimitReached">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
     <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-      GitHub's API rate limit has been reached. It will be reset in one minute.
+      Coś poszło nie tak! :(
     </div>
   </div>
 
-  <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
+  <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc" class="example-table">
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> Name </mat-header-cell>
-      <mat-cell *matCellDef="let product"> {{product.name}} </mat-cell>
+      <mat-cell *matCellDef="let product">
+        {{product.name}}
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="description">
       <mat-header-cell *matHeaderCellDef>
         Description
       </mat-header-cell>
-      <mat-cell *matCellDef="let product">{{ product.description }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="product_id">
-      <mat-header-cell *matHeaderCellDef>
-        Product Id
-      </mat-header-cell>
-      <mat-cell *matCellDef="let product">{{ product.product_id }}</mat-cell>
+      <mat-cell *matCellDef="let product">
+        <span *ngIf="!product.editMode"> {{ product.description }}</span>
+        <div class="cell-container" *ngIf="product.editMode">
+          <form class="example-form">
+            <div class="form-group">
+              <input type="text" class="form-control" name="description" [(ngModel)]="product.description">
+            </div>
+          </form>
+        </div>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
         Price
       </mat-header-cell>
       <mat-cell *matCellDef="let product">{{ product.price }}</mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let products; columns: displayedColumns;"></mat-row>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        Actions
+      </mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <button mat-button (click)="edit($event, product)" *ngIf="!product.editMode">
+          <mat-icon fontSet="fa" fontIcon="fa-edit"></mat-icon>
+          Edit
+        </button>
+        <button mat-button (click)="delete($event, product)" *ngIf="!product.editMode">
+          <mat-icon fontSet="fa" fontIcon="fa-trash-o"></mat-icon>
+          Delete
+        </button>
+        <button mat-button (click)="save($event, product)" *ngIf="product.editMode">
+          <mat-icon fontSet="fa" fontIcon="fa-check"></mat-icon>
+          Save
+        </button>
+        <button mat-button (click)="cancel($event, product)" *ngIf="product.editMode">
+          <mat-icon fontSet="fa" fontIcon="fa-times"></mat-icon>
+          Cancel
+        </button>
+      </mat-cell>
+    </ng-container>
 
-    <mat-paginator [length]="resultsLength" [pageSize]="10">
-    </mat-paginator>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
   </mat-table>
+
+  <mat-paginator #paginator [length]="resultsLength" [pageSize]="10">
+  </mat-paginator>
 </div>

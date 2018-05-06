@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 
 namespace OracleApp.Infrastructure.Persistence
 {
-    public class OracleContext
+    public class OracleContextAsync
     {
         public static string ConnectionString { get; set; }
 
         private static OracleConnection conn = null;
 
-        private static bool Open()
+        private static async Task<bool> OpenAsync()
         {
             conn = new OracleConnection(ConnectionString);
             try
             {
-                conn.Open();
+                await conn.OpenAsync();
                 return true;
             }
             catch (Exception ex)
@@ -35,41 +37,41 @@ namespace OracleApp.Infrastructure.Persistence
             }
         }
 
-        public static int CreateUpdateDelete(string sql)
+        public static async Task<int> CreateUpdateDeleteAsync(string sql)
         {
-            Open();
+            await OpenAsync();
             OracleCommand cmd = new OracleCommand(sql, conn);
-            int result = cmd.ExecuteNonQuery();
+            int result = await cmd.ExecuteNonQueryAsync();
             Close();
             return result;
         }
 
-        public static IList<T> QueryForList<T>(string sql)
+        public static async Task<IList<T>> QueryForListAsync<T>(string sql)
         {
-            Open();
-            OracleDataReader dtr = QueryForReader(sql);
-            var list = Dtr2List<T>(dtr);
+            await OpenAsync();
+            DbDataReader dtr = await QueryForReaderAsync(sql);
+            var list = await Dtr2ListAsync<T>(dtr);
             Close();
             return list;
         }
 
-        public static object QueryForObj<T>(string sql)
+        public static async Task<T> QueryForObjAsync<T>(string sql)
         {
-            Open();
-            OracleDataReader dtr = QueryForReader(sql);
-            var obj = Dtr2Obj<T>(dtr);
+            await OpenAsync();
+            DbDataReader dtr = await QueryForReaderAsync(sql);
+            var obj = await Dtr2ObjAsync<T>(dtr);
             Close();
             return obj;
         }
 
-        private static OracleDataReader QueryForReader(string sql)
+        private static async Task<DbDataReader> QueryForReaderAsync(string sql)
         {
             try
             {
                 OracleCommand cmd = conn.CreateCommand();
                 cmd.CommandText = sql;
                 
-                OracleDataReader dtr = cmd.ExecuteReader();
+                DbDataReader dtr = await cmd.ExecuteReaderAsync();
                
                 return dtr;
             }
@@ -79,11 +81,11 @@ namespace OracleApp.Infrastructure.Persistence
             }
         }
 
-        private static IList<T> Dtr2List<T>(OracleDataReader reader)
+        private static async Task<IList<T>> Dtr2ListAsync<T>(DbDataReader reader)
         {
             IList<T> list = new List<T>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 T t = Activator.CreateInstance<T>();
                 Type obj = t.GetType();
@@ -108,12 +110,12 @@ namespace OracleApp.Infrastructure.Persistence
         }
 
 
-        private static object Dtr2Obj<T>(OracleDataReader reader)
+        private static async Task<T> Dtr2ObjAsync<T>(DbDataReader reader)
         {
             T t = Activator.CreateInstance<T>();
             Type obj = t.GetType();
 
-            if (reader.Read())
+            if (await reader.ReadAsync())
             {
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
@@ -134,7 +136,7 @@ namespace OracleApp.Infrastructure.Persistence
                 return t;
             }
             else
-                return null;
+                return default(T);
         }
 
 
@@ -165,37 +167,39 @@ namespace OracleApp.Infrastructure.Persistence
             return null;
         }
 
-        public static int ExcuteProc(string procName)
+        public static async Task<int> ExcuteProc(string procName)
         {
-            return ExcuteSql(procName, null, CommandType.StoredProcedure);
+            return await ExcuteSqlAsync(procName, null, CommandType.StoredProcedure);
         }
 
-        public static int ExcuteProc(string procName, OracleParameter[] pars)
+        public static async Task<int> ExcuteProc(string procName, OracleParameter[] pars)
         {
-            return ExcuteSql(procName, pars, CommandType.StoredProcedure);
+            return await ExcuteSqlAsync(procName, pars, CommandType.StoredProcedure);
         }
 
-        public static int ExcuteSql(string strSql)
+        public static async Task<int> ExcuteSql(string strSql)
         {
-            return ExcuteSql(strSql, null);
+            return await ExcuteSqlAsync(strSql, null);
         }
 
-        public static int ExcuteSql(string strSql, OracleParameter[] paras)
+        public static async Task<int> ExcuteSqlAsync(string strSql, OracleParameter[] paras)
         {
-            return ExcuteSql(strSql, paras, CommandType.Text);
+            return await ExcuteSqlAsync(strSql, paras, CommandType.Text);
         }
 
-        public static int ExcuteSql(string strSql, OracleParameter[] paras, CommandType cmdType)
+        public static async Task<int> ExcuteSqlAsync(string strSql, OracleParameter[] paras, CommandType cmdType)
         {
             int i = 0;
-            Open();
-            OracleCommand cmd = new OracleCommand(strSql, conn);
-            cmd.CommandType = cmdType;
+            await OpenAsync();
+            OracleCommand cmd = new OracleCommand(strSql, conn)
+            {
+                CommandType = cmdType
+            };
             if (paras != null)
             {
                 cmd.Parameters.AddRange(paras);
             }
-            i = cmd.ExecuteNonQuery();
+            i = await cmd.ExecuteNonQueryAsync();
             Close();
 
             return i;

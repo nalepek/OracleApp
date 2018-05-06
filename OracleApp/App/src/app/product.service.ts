@@ -29,4 +29,10 @@ export class ProductService {
     let url = this.productsUrl + "/get";    
     return this.http.post<Product>(url, this.criteria, { observe: 'response' });
   }
+
+  updateProduct(id) {
+    const url = this.productsUrl + '/update';
+
+    return this.http.post<Product>(url, id, { observe: 'response' });
+  }
 }

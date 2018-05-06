@@ -1,6 +1,6 @@
 export interface ProductSearchResult {
   items: Product[];
-  total_count: number;
+  count: number;
 }
 
 export interface Product {

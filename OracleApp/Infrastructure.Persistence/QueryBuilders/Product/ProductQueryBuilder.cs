@@ -12,7 +12,6 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
     {
         public ProductQueryBuilder()
         {
-
         }
 
         public override string Select(ProductSearchCriteria criteria)

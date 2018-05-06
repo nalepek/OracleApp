@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OracleApp.Application.Product;
 using OracleApp.Infrastructure.Persistence.Dal.Product;
@@ -11,10 +12,12 @@ namespace OracleApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductQueryService _productQueryService;
+        private readonly IProductCommandService _productCommandService;
 
-        public ProductController(IProductQueryService productQueryService)
+        public ProductController(IProductQueryService productQueryService, IProductCommandService productCommandService)
         {
             _productQueryService = productQueryService;
+            _productCommandService = productCommandService;
         }
 
         // GET api/values
@@ -31,22 +34,16 @@ namespace OracleApp.Controllers
             return _productQueryService.Get(criteria);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("Update")]
+        public Task<ProductDal> UpdateProduct([FromBody] int productId)
         {
+            return _productCommandService.Update(productId);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPost("Delete")]
+        public void DeleteProduct([FromBody] int productId)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            _productCommandService.Delete(productId);
         }
     }
 }

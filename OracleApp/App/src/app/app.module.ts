@@ -1,14 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule } from '@angular/material';
-//import { SatPopoverModule } from '@ncstate/sat-popover';
+import {
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatProgressSpinnerModule,
+  MatIconModule,
+  MatIconRegistry,
+  MatInputModule
+} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsComponent } from './products/products.component';
 import { ProductService } from './product.service';
-
 
 @NgModule({
   declarations: [
@@ -22,10 +31,19 @@ import { ProductService } from './product.service';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
-    //,SatPopoverModule
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+    FormsModule,
+    MatInputModule
   ],
-  providers: [ProductService],
+  providers: [ProductService, MatIconRegistry],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(public matIconRegistry: MatIconRegistry) {
+    matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
+  }
+  
+}
