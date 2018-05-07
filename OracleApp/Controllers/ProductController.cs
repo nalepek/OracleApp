@@ -29,9 +29,9 @@ namespace OracleApp.Controllers
 
         // GET api/values/5
         [HttpPost("get")]
-        public ProductDal GetProduct([FromBody] ProductSearchCriteria criteria)
+        public ProductDal GetProduct([FromBody] int productId)
         {
-            return _productQueryService.Get(criteria);
+            return _productQueryService.Get(productId);
         }
 
         [HttpPost("update")]

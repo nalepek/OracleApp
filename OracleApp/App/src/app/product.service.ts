@@ -12,6 +12,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  private _headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
   private productsUrl = 'http://localhost:53721/api/product';
 
   criteria = new ProductSearchCriteria();
@@ -33,7 +34,7 @@ export class ProductService {
   updateProduct(product) : Observable<HttpResponse<Product>> {
     const url = this.productsUrl + '/update';
 
-    let a = this.http.post<Product>(url, { product: product }, { observe: 'response' });
+    let a = this.http.post<Product>(url, product, { headers: this._headers, observe: 'response' });
     return a;
   }
 }

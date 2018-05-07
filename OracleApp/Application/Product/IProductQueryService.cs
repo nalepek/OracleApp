@@ -6,7 +6,7 @@ namespace OracleApp.Application.Product
     public interface IProductQueryService
     {
         ProductSearchResult Search(ProductSearchCriteria criteria);
-        ProductDal Get(ProductSearchCriteria criteria);
+        ProductDal Get(int productId);
     }
 
     public class ProductQueryService : IProductQueryService
@@ -18,9 +18,9 @@ namespace OracleApp.Application.Product
             _productSearcher = productSearcher;
         }
 
-        public ProductDal Get(ProductSearchCriteria criteria)
+        public ProductDal Get(int productId)
         {
-            return _productSearcher.Get(criteria);
+            return _productSearcher.Get(productId);
         }
 
         public ProductSearchResult Search(ProductSearchCriteria criteria)

@@ -68,9 +68,10 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
             };
         }
 
-        public ProductDal Get(ProductSearchCriteria criteria)
+        public ProductDal Get(int productId)
         {
-            string sql = BuildResult(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria), criteria);
+            string sql = "";
+            //string sql = BuildResult(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria), criteria);
 
             var result = OracleContext.QueryForObj<ProductDal>(sql);
 

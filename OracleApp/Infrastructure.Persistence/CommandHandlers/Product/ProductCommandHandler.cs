@@ -10,7 +10,11 @@ namespace OracleApp.Infrastructure.Persistence.CommandHandlers.Product
     {
         protected override async Task<ProductDal> HandleCore(ProductCommand command)
         {
-            var sql = "";
+            OracleContextAsync.QueryForObjAsync(sql);
+
+            var sql = string.Concat(@"UPDATE products "
+                        
+                            SET ");
 
             OracleContext.CreateUpdateDelete(sql);
 
