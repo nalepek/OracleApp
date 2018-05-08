@@ -6,6 +6,7 @@ namespace OracleApp.Infrastructure.Persistence.Searchers.Product
     {
         ProductSearchResult Search(ProductSearchCriteria criteria);
 
-        ProductDal Get(int productId);
+        ProductDal Get(decimal productId);
+        ProductDal GetAsync(decimal productId);
     }
 }

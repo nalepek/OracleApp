@@ -13,7 +13,7 @@ namespace OracleApp.Common.QueryBuilders
 
         public abstract CountDal GetCount(string select, string from, string where, string orderBy, TSearchCriteria criteria);
 
-        public string BuildResult(string select, string from, string where, string orderBy, TSearchCriteria criteria)
+        public string BuildPagedResult(string select, string from, string where, string orderBy, TSearchCriteria criteria)
         {
             var sql = String.Format(" {0} FROM ({1} {2}) {3} {4} {5}",
                                             select,
@@ -24,6 +24,16 @@ namespace OracleApp.Common.QueryBuilders
                                             orderBy
                                             );
 
+            return sql;
+        }
+
+        public string BuildResult(string select, string from, string where)
+        {
+            var sql = String.Format(" {0} {1} {2} ",
+                                            select,
+                                            from,
+                                            where
+                                            );
             return sql;
         }
 

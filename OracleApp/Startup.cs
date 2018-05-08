@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OracleApp.Application.Product;
 using OracleApp.Infrastructure.Persistence;
 using OracleApp.Infrastructure.Persistence.QueryBuilders.Product;
+using OracleApp.Infrastructure.Persistence.Repositories;
+using OracleApp.Infrastructure.Persistence.Repositories.Product;
 using OracleApp.Infrastructure.Persistence.Searchers.Product;
 using OracleApp.Middleware;
 
@@ -27,6 +29,7 @@ namespace OracleApp
             services.AddTransient<IProductQueryService, ProductQueryService>();
             services.AddTransient<IProductSearcher, ProductQueryBuilder>();
             services.AddTransient<IProductCommandService, ProductCommandService>();
+            services.AddTransient<IProductRepository, ProductRepository>();
 
             services.AddMediatR(typeof(Startup));
 
@@ -43,6 +46,7 @@ namespace OracleApp
             services.AddMvc();
 
             OracleContext.ConnectionString = $"User Id=system;Password=system;Data Source=127.0.0.1:1521/xe";
+            OracleContextAsync.ConnectionString = $"User Id=system;Password=system;Data Source=127.0.0.1:1521/xe";
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

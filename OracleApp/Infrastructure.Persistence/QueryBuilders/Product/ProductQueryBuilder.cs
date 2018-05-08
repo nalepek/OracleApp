@@ -51,7 +51,7 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
 
             if (count != null && count.count != 0)
             {
-                string sql = BuildResult(select, from, where, orderBy, criteria);
+                string sql = BuildPagedResult(select, from, where, orderBy, criteria);
 
                 var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
 
@@ -68,23 +68,28 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
             };
         }
 
-        public ProductDal Get(int productId)
+        public ProductDal Get(decimal productId)
         {
-            string sql = "";
-            //string sql = BuildResult(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria), criteria);
+            var criteria = new ProductSearchCriteria
+            {
+                ProductId = Convert.ToInt32(productId)
+            };
 
-            var result = OracleContext.QueryForObj<ProductDal>(sql);
+            string sql = BuildResult(Select(criteria), From(criteria), Where(criteria));
 
-            return (ProductDal)result;
+            return OracleContext.QueryForObj<ProductDal>(sql);
         }
 
         public override CountDal GetCount(string select, string from, string where, string orderBy, ProductSearchCriteria criteria)
         {
             string sql = BuildCount(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria));
 
-            var result = OracleContext.QueryForObj<CountDal>(sql);
+            return OracleContext.QueryForObj<CountDal>(sql);
+        }
 
-            return (CountDal)result;
+        public ProductDal GetAsync(decimal productId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

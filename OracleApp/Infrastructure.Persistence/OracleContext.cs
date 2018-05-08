@@ -53,7 +53,7 @@ namespace OracleApp.Infrastructure.Persistence
             return list;
         }
 
-        public static object QueryForObj<T>(string sql)
+        public static T QueryForObj<T>(string sql)
         {
             Open();
             OracleDataReader dtr = QueryForReader(sql);
@@ -108,7 +108,7 @@ namespace OracleApp.Infrastructure.Persistence
         }
 
 
-        private static object Dtr2Obj<T>(OracleDataReader reader)
+        private static T Dtr2Obj<T>(OracleDataReader reader)
         {
             T t = Activator.CreateInstance<T>();
             Type obj = t.GetType();
@@ -134,7 +134,7 @@ namespace OracleApp.Infrastructure.Persistence
                 return t;
             }
             else
-                return null;
+                return default(T);
         }
 
 
