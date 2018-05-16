@@ -8,4 +8,10 @@ namespace OracleApp.Common.CommandHandlers
     {
         protected abstract override Task<TResponse> HandleCore(TCommand request);
     }
+
+    public abstract class BaseAbstractCommandHandler<TCommand> : AsyncRequestHandler<TCommand>, ICommand
+        where TCommand : IRequest
+    {
+        protected abstract override Task HandleCore(TCommand request);
+    }
 }

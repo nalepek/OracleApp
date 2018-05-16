@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="App\src\app\products\NewFolder\**" />
+    <Content Remove="App\src\app\products\NewFolder\**" />
+    <EmbeddedResource Remove="App\src\app\products\NewFolder\**" />
+    <None Remove="App\src\app\products\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="App\src\app\product.ts" />
   </ItemGroup>
 
@@ -24,10 +31,6 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="App\src\app\product.ts" />
   </ItemGroup>
 
 </Project>

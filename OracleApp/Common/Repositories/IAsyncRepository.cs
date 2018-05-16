@@ -4,9 +4,8 @@ namespace OracleApp.Common.Repositories
 {
     public interface IAsyncRepository<T>
     {
-        Task<int> UpdateAsync(T oldItem, T newItem);
-        //Task<T> UpdateAsync(decimal id);
-        //Task DeleteAsync(T item);
+        Task UpdateAsync(T oldItem, T newItem);
+        Task AddAsync(T newItem);
         Task DeleteAsync(decimal id);
     }
 }

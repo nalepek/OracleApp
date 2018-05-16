@@ -45,7 +45,6 @@ namespace OracleApp
 
             services.AddMvc();
 
-            OracleContext.ConnectionString = $"User Id=system;Password=system;Data Source=127.0.0.1:1521/xe";
             OracleContextAsync.ConnectionString = $"User Id=system;Password=system;Data Source=127.0.0.1:1521/xe";
         }
 

@@ -1,12 +1,13 @@
-﻿using OracleApp.Infrastructure.Persistence.Dal.Product;
+﻿using System.Threading.Tasks;
+using OracleApp.Infrastructure.Persistence.Dal.Product;
 using OracleApp.Infrastructure.Persistence.Searchers.Product;
 
 namespace OracleApp.Application.Product
 {
     public interface IProductQueryService
     {
-        ProductSearchResult Search(ProductSearchCriteria criteria);
-        ProductDal Get(int productId);
+        Task<ProductSearchResult> SearchAsync(ProductSearchCriteria criteria);
+        Task<ProductDal> GetAsync(int productId);
     }
 
     public class ProductQueryService : IProductQueryService
@@ -18,14 +19,14 @@ namespace OracleApp.Application.Product
             _productSearcher = productSearcher;
         }
 
-        public ProductDal Get(int productId)
+        public async Task<ProductDal> GetAsync(int productId)
         {
-            return _productSearcher.Get(productId);
+            return await _productSearcher.GetAsync(productId);
         }
 
-        public ProductSearchResult Search(ProductSearchCriteria criteria)
+        public async Task<ProductSearchResult> SearchAsync(ProductSearchCriteria criteria)
         {
-            return _productSearcher.Search(criteria);
+            return await _productSearcher.SearchAsync(criteria);
         }
     }
 }

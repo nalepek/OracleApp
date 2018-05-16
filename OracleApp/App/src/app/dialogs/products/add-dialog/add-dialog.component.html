@@ -1,0 +1,29 @@
+<div class="container">
+  <h3 mat-dialog-title>Dodaj nowy produkt</h3>
+  <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm" id="ngForm">
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Name" [(ngModel)]="data.name" name="name" required />
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Description" [(ngModel)]="data.description" name="description" />
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Price" [(ngModel)]="data.price" name="price" required type="number" />
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+  </form>
+  <div mat-dialog-actions>
+    <button mat-button [type]="submit" [disabled]="!formControl.valid" (click)="confirm($event)" form="ngForm">Dodaj</button>
+    <button mat-button (click)="cancel($event)" tabindex="-1">Anuluj</button>
+  </div>
+</div>

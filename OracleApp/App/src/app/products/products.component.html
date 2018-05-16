@@ -10,7 +10,7 @@
   <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc" class="example-table">
 
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> Nazwa </mat-header-cell>
       <mat-cell *matCellDef="let product">
         {{product.name}}
       </mat-cell>
@@ -18,7 +18,7 @@
 
     <ng-container matColumnDef="description">
       <mat-header-cell *matHeaderCellDef>
-        Description
+        Opis
       </mat-header-cell>
       <mat-cell *matCellDef="let product">
         <span *ngIf="!product.editMode"> {{ product.description }}</span>
@@ -34,31 +34,26 @@
 
     <ng-container matColumnDef="price">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Price
+        Cena
       </mat-header-cell>
       <mat-cell *matCellDef="let product">{{ product.price }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
-        Actions
+        <!--Actions-->
+        <button mat-icon-button color="primary" (click)="add($event)">
+          <mat-icon fontSet="fa" fontIcon="fa-plus"></mat-icon>
+        </button>
       </mat-header-cell>
       <mat-cell *matCellDef="let product">
         <button mat-button (click)="edit($event, product)" *ngIf="!product.editMode">
           <mat-icon fontSet="fa" fontIcon="fa-edit"></mat-icon>
-          Edit
+          Edytuj
         </button>
         <button mat-button (click)="delete($event, product)" *ngIf="!product.editMode">
           <mat-icon fontSet="fa" fontIcon="fa-trash-o"></mat-icon>
-          Delete
-        </button>
-        <button mat-button (click)="save($event, product)" *ngIf="product.editMode">
-          <mat-icon fontSet="fa" fontIcon="fa-check"></mat-icon>
-          Save
-        </button>
-        <button mat-button (click)="cancel($event, product)" *ngIf="product.editMode">
-          <mat-icon fontSet="fa" fontIcon="fa-times"></mat-icon>
-          Cancel
+          Usuń
         </button>
       </mat-cell>
     </ng-container>

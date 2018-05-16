@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductService } from '../product.service';
-import { Product, ProductSearchResult } from '../product';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ProductService } from '../services/products/product.service';
+import { Product, ProductSearchResult } from '../models/products/product';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { merge } from 'rxjs/observable/merge';
 import { map } from 'rxjs/operators/map';
 import { startWith } from 'rxjs/operators/startWith';
 import { switchMap } from 'rxjs/operators/switchMap';
 import { catchError } from 'rxjs/operators/catchError';
 import { of as observableOf } from 'rxjs/observable/of';
+import { EditDialogComponent } from '../dialogs/products/edit-dialog/edit-dialog.component';
+import { AddDialogComponent } from '../dialogs/products/add-dialog/add-dialog.component';
+import { DeleteDialogComponent } from '../dialogs/products/delete-dialog/delete-dialog.component';
 
 
 @Component({
@@ -32,9 +35,18 @@ export class ProductsComponent implements OnInit {
   headers;
   error;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.loadData();
+  }
+
+  private refreshTable() {
+
+  }
+
+  public loadData() {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page).pipe(
@@ -53,7 +65,6 @@ export class ProductsComponent implements OnInit {
         return data.items;
       }),
       catchError(error => {
-        let a = error;
         this.isLoadingResults = false;
         // Catch if the GitHub API has reached its rate limit. Return empty data.
         this.isRateLimitReached = true;
@@ -63,21 +74,6 @@ export class ProductsComponent implements OnInit {
       this.dataSource.data = data;
     });
   }
-
-  //ngAfterViewInit() {
-  //  this.dataSource.paginator = this.paginator;
-  //}
-
-  //getProducts(sort: string, order: string, page: number) {
-  //  return this.productService.getProducts(sort, order, page).subscribe(response => {
-  //    const keys = response.headers.keys();
-  //    this.headers = keys.map(key => { '${key}: ${response.headers.get(key)}' });
-  //    this.products = response.body;
-  //  },
-  //    error => {
-  //      this.error = error
-  //    });
-  //}
 
   getProduct() {
     return this.productService.getProduct().subscribe(response => {
@@ -90,28 +86,42 @@ export class ProductsComponent implements OnInit {
       });
   }
 
-  edit(event, product) {
-    //edit -> ok
-    //delete -> cancel
-    //editable fields
-    product.editMode = true;
+  edit(event, product: Product) {
+    const dialogRef = this.dialog.open(EditDialogComponent,
+      {
+        data: new Product(product.name, product.description, product.price, product.product_id, product.type_id),
+        maxHeight: '90%'
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData();
+    },
+      error => {
+        this.error = error;
+      });
   }
 
-  delete(event, product) {
-    //are you sure
-  }
+  delete(event, product: Product) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent,
+      {
+        data: product
+      });
 
-  save(event, product) {
+    dialogRef.afterClosed().subscribe(result => {
 
-    product.editMode = false;
-    let a = this.productService.updateProduct(product).subscribe(data => {
-      let x = data;
+      this.loadData();
     });
-    let b = 1;
   }
 
-  cancel(event, product) {
+  add(event) {
+    const dialogRef = this.dialog.open(AddDialogComponent,
+      {
+        data: new Product()
+      });
 
-    product.editMode = false;
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData();
+    });
   }
+
 }

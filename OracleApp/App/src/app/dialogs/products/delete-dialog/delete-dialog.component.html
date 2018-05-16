@@ -1,0 +1,15 @@
+<div class="container">
+  <h3 mat-dialog-title>Na pewno chcesz usunąć produkt?</h3>
+  <div mat-dialog-content>
+    Produkt: {{data.name}}
+    <p></p>
+    Opis: {{data.description}}
+    <p></p>
+    Cena: {{data.price}}
+    <p></p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="confirm($event)">Usuń</button>
+    <button mat-button (click)="cancel($event)" tabindex="-1">Anuluj</button>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 ﻿using OracleApp.Common.Searchers;
 using OracleApp.Infrastructure.Persistence.Dal;
 using System;
+using System.Threading.Tasks;
 
 namespace OracleApp.Common.QueryBuilders
 {
@@ -11,7 +12,7 @@ namespace OracleApp.Common.QueryBuilders
         {
         }
 
-        public abstract CountDal GetCount(string select, string from, string where, string orderBy, TSearchCriteria criteria);
+        public abstract Task<CountDal> GetCountAsync(string select, string from, string where, string orderBy, TSearchCriteria criteria);
 
         public string BuildPagedResult(string select, string from, string where, string orderBy, TSearchCriteria criteria)
         {

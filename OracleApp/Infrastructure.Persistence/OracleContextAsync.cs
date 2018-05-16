@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileProviders.Physical;
 using Oracle.ManagedDataAccess.Client;
 
 namespace OracleApp.Infrastructure.Persistence
@@ -37,13 +38,27 @@ namespace OracleApp.Infrastructure.Persistence
             }
         }
 
-        public static async Task<int> CreateUpdateDeleteAsync(string sql)
+        private static async Task ExecuteTransactionAsync(OracleCommand command, string sql)
+        {
+            var tran = conn.BeginTransaction();
+            try
+            {
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                tran.Rollback();
+                throw ex;
+            }
+            tran.Commit();
+        }
+
+        public static async Task CreateUpdateDeleteAsync(string sql)
         {
             await OpenAsync();
             OracleCommand cmd = new OracleCommand(sql, conn);
-            int result = await cmd.ExecuteNonQueryAsync();
+            await ExecuteTransactionAsync(cmd, sql);
             Close();
-            return result;
         }
 
         public static async Task<IList<T>> QueryForListAsync<T>(string sql)
@@ -167,17 +182,17 @@ namespace OracleApp.Infrastructure.Persistence
             return null;
         }
 
-        public static async Task<int> ExcuteProc(string procName)
+        public static async Task<int> ExcuteProcAsync(string procName)
         {
             return await ExcuteSqlAsync(procName, null, CommandType.StoredProcedure);
         }
 
-        public static async Task<int> ExcuteProc(string procName, OracleParameter[] pars)
+        public static async Task<int> ExcuteProcAsync(string procName, OracleParameter[] pars)
         {
             return await ExcuteSqlAsync(procName, pars, CommandType.StoredProcedure);
         }
 
-        public static async Task<int> ExcuteSql(string strSql)
+        public static async Task<int> ExcuteSqlAsync(string strSql)
         {
             return await ExcuteSqlAsync(strSql, null);
         }

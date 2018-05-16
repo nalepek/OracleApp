@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using OracleApp.Common.QueryBuilders;
 using OracleApp.Infrastructure.Persistence.Dal;
 using OracleApp.Infrastructure.Persistence.Dal.Product;
@@ -40,24 +41,24 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
                                     string.IsNullOrWhiteSpace(criteria.Order) ? " asc " : String.Format(" {0} " , criteria.Order));                                    
         }
 
-        public ProductSearchResult Search(ProductSearchCriteria criteria)
+        public async Task<ProductSearchResult> SearchAsync(ProductSearchCriteria criteria)
         {
             var select = Select(criteria);
             var from = From(criteria);
             var where = Where(criteria);
             var orderBy = OrderBy(criteria);
 
-            var count = GetCount(select, from, where, orderBy, criteria);
+            var count = await GetCountAsync(select, from, where, orderBy, criteria);
 
             if (count != null && count.count != 0)
             {
                 string sql = BuildPagedResult(select, from, where, orderBy, criteria);
 
-                var list = OracleContext.QueryForList<ProductDal>(sql).ToList();
+                var list = await OracleContextAsync.QueryForListAsync<ProductDal>(sql);
 
                 return new ProductSearchResult
                 {
-                    Items = list,
+                    Items = list.ToList(),
                     Count = count.count
                 };
             }
@@ -68,7 +69,7 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
             };
         }
 
-        public ProductDal Get(decimal productId)
+        public async Task<ProductDal> GetAsync(decimal productId)
         {
             var criteria = new ProductSearchCriteria
             {
@@ -77,19 +78,15 @@ namespace OracleApp.Infrastructure.Persistence.QueryBuilders.Product
 
             string sql = BuildResult(Select(criteria), From(criteria), Where(criteria));
 
-            return OracleContext.QueryForObj<ProductDal>(sql);
+            return await OracleContextAsync.QueryForObjAsync<ProductDal>(sql);
         }
 
-        public override CountDal GetCount(string select, string from, string where, string orderBy, ProductSearchCriteria criteria)
+        public override async Task<CountDal> GetCountAsync(string select, string from, string where, string orderBy, ProductSearchCriteria criteria)
         {
             string sql = BuildCount(Select(criteria), From(criteria), Where(criteria), OrderBy(criteria));
 
-            return OracleContext.QueryForObj<CountDal>(sql);
+            return await OracleContextAsync.QueryForObjAsync<CountDal>(sql);
         }
 
-        public ProductDal GetAsync(decimal productId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

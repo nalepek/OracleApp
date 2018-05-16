@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OracleApp.Application.Product;
 using OracleApp.Infrastructure.Persistence.Dal.Product;
@@ -22,28 +20,35 @@ namespace OracleApp.Controllers
 
         // GET api/values
         [HttpGet("search")]
-        public ProductSearchResult SearchProducts([FromQuery] ProductSearchCriteria criteria)
+        public async Task<ProductSearchResult> SearchProducts([FromQuery] ProductSearchCriteria criteria)
         {
-            return _productQueryService.Search(criteria);
+            return await _productQueryService.SearchAsync(criteria);
         }
 
         // GET api/values/5
         [HttpPost("get")]
-        public ProductDal GetProduct([FromBody] int productId)
+        public async Task<ProductDal> GetProduct([FromBody] int productId)
         {
-            return _productQueryService.Get(productId);
+            return await _productQueryService.GetAsync(productId);
         }
 
         [HttpPost("update")]
-        public Task<ProductDal> UpdateProduct([FromBody] ProductDal product)
+        public async Task<ProductDal> UpdateProduct([FromBody] ProductDal product)
         {
-            return _productCommandService.Update(product);
+            return await _productCommandService.UpdateAsync(product);
         }
 
         [HttpPost("delete")]
-        public void DeleteProduct([FromBody] int productId)
+        public async Task DeleteProduct([FromBody] decimal productId)
         {
-            _productCommandService.Delete(productId);
+            await _productCommandService.DeleteAsync(productId);
         }
+
+        [HttpPost("add")]
+        public async Task AddProduct([FromBody] ProductDal product)
+        {
+            await _productCommandService.AddAsync(product);
+        }
+
     }
 }

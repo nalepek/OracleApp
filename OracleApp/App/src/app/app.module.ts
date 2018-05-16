@@ -8,21 +8,28 @@ import {
   MatProgressSpinnerModule,
   MatIconModule,
   MatIconRegistry,
-  MatInputModule
+  MatInputModule,
+  MatDialogModule,
+  MatButtonModule,
+  MatMenuModule
 } from '@angular/material';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsComponent } from './products/products.component';
-import { ProductService } from './product.service';
+import { ProductService } from './services/products/product.service';
+import { EditDialogComponent } from './dialogs/products/edit-dialog/edit-dialog.component';
+import { DeleteDialogComponent } from './dialogs/products/delete-dialog/delete-dialog.component';
+import { AddDialogComponent } from './dialogs/products/add-dialog/add-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProductsComponent
+    ProductsComponent,
+    EditDialogComponent,
+    DeleteDialogComponent,
+    AddDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +43,13 @@ import { ProductService } from './product.service';
     MatMenuModule,
     MatIconModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    EditDialogComponent,
+    DeleteDialogComponent,
+    AddDialogComponent
   ],
   providers: [ProductService, MatIconRegistry],
   bootstrap: [AppComponent]
